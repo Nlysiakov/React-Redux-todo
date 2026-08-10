@@ -32,14 +32,14 @@ export const taskList: Array<Task> = [
   },
   {
     id: '04',
-    title: 'Запланить за квартиру',
+    title: 'Заплатить за квартиру',
     priority: Prioroty.HIGH,
     status: Status.DONE,
     progress: 100,
   },
   {
     id: '05',
-    title: 'Напистаь статью',
+    title: 'Написать статью',
     priority: Prioroty.MEDIUM,
     status: Status.PROGRESS,
     progress: 50,

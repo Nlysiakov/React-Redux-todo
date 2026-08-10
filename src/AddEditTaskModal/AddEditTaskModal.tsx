@@ -22,7 +22,7 @@ export const AddEditTaskModal = () => {
             value=""
           />
           <div className="modal-priority">
-            <span>Приортитет</span>
+            <span>Приоритет</span>
             <ul className="priority-buttons">
               {['high', 'medium', 'low'].map((priority) => (
                 <li
