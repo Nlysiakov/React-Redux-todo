@@ -1,8 +1,11 @@
 import { Button } from '../Button/Button';
 import { Modal } from '../Modal/Modal';
 import './style.scss';
+import { FC } from 'react';
+import { TDeleteModalProps } from '../types/Types';
 
-export const DeleteModal = ({onClose, onDelete, taskTitle}) => {
+
+export const DeleteModal:FC<TDeleteModalProps> = ({onClose, onDelete})=> {
   const handleDelete = () =>{
     onDelete()
     onClose()

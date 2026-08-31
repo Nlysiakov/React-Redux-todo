@@ -4,34 +4,22 @@ import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
 import { Modal } from '../Modal/Modal';
 import './style.scss';
-import { useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
+import { TAddEditTaskModalProps, TTask } from '../types/Types';
 
-type Task={
-  id: number;
-  title: string;
-  priority: "high" | "medium" | "low";
-  status: "todo" | "progress" | "done";
-  progress: number
-}
 
-type AddEditTaskModalProps = {
-  onClose: () => void;
-  initialData?: Task | null;
-  onSubmit: (taskData: Omit<Task, "id" | "progress"> & { id?: number }) => void;
-};
-
-export const AddEditTaskModal = ({
+export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
   onClose,
   initialData, 
-  onSubmit} : AddEditTaskModalProps ) => {
+  onSubmit} ) => {
 
   const isEditing = !!initialData
 
-  const [title, setTitle]=useState<string>(initialData?.title || "")
-  const [priority, setPriority]=useState<"low" | "medium" | "high">(initialData?.priority || "medium")
-  const [status, setStatus]=useState<"todo" | "progress" | "done">(initialData?.status || "todo")
+  const [ title, setTitle ] = useState<string>( initialData?.title || "" )
+  const [ priority, setPriority ] = useState<TTask["priority"]>( initialData?.priority || "medium" )
+  const [ status ] = useState<TTask["status"]>( initialData?.status || "todo" )
 
-  const handleSubmit=(e)=>{
+  const handleSubmit=(e: FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
     const taskData={
       title,
@@ -60,14 +48,14 @@ export const AddEditTaskModal = ({
           <div className="modal-priority">
             <span>Приоритет</span>
             <ul className="priority-buttons">
-              {['high', 'medium', 'low'].map((p) => (
+              {[ 'high', 'medium', 'low' ].map((p) => (
                 <li
                   key={p}
-                  className={classNames(
-                    p===priority && `${p}-selected`, p)}
+                  className = {classNames(
+                    p === priority && `${p}-selected`, p)}
                     onClick={()=>setPriority(p)}
                 >
-                  {p==="high" ? "Высокий" : p ==="medium" ? "Средний" : "Низкий"}
+                  { p === "high" ? "Высокий" : p === "medium" ? "Средний" : "Низкий" }
                 </li>
               ))}
             </ul>

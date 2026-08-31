@@ -6,31 +6,25 @@ import { DeleteModal } from '../DeleteModal/DeleteModal';
 import { TaskCard } from '../TaskCard/TaskCard';
 import { taskList } from '../serverData/taskList';
 import { useState } from 'react';
+import { TTask } from '../types/Types';
 
-type Task={
-  id: number;
-  title: string;
-  priority: "low" | "medium" | "high";
-  status: "todo" | "progress" | "done";
-  progress: number;
-}
 
 export const TodoList = () => {
 
   const [tasks, setTasks]=useState(taskList)
 
-  const [statusAddEditModal, setStatusAddEditModal]=useState<boolean>(false)
-  const [statusDeleteModal, setStatusDeleteModal]=useState<boolean>(false)
+  const [statusAddEditModal, setStatusAddEditModal]=useState(false)
+  const [statusDeleteModal, setStatusDeleteModal]=useState(false)
 
-  const [taskToDelete, setTaskToDelete]=useState<null | Task>(null)
-  const [taskToEdit, setTaskToEdit]=useState<null | Task>(null)
+  const [taskToDelete, setTaskToDelete]=useState<null | TTask>(null)
+  const [taskToEdit, setTaskToEdit]=useState<null | TTask>(null)
 
   const openAddModal=()=>{
     setTaskToEdit(null)
     setStatusAddEditModal(true)
   }
 
-  const openEditModal=(task: Task):void=>{
+  const openEditModal=(task: TTask):void=>{
     setTaskToEdit(task)
     setStatusAddEditModal(true)
   }
@@ -45,7 +39,7 @@ export const TodoList = () => {
     setTaskToDelete(null)
   }
 
-  const openDeleteModal=(task: Task):void=>{
+  const openDeleteModal=(task: TTask):void=>{
     setStatusDeleteModal(true)
     setTaskToDelete(task)
   }
@@ -53,12 +47,14 @@ export const TodoList = () => {
 
   const handleDeleteTask=()=>{
     if(taskToDelete){
-      setTasks(prev=>prev.filter(task=>task.id!==taskToDelete.id))
+      setTasks(prev =>
+      prev.filter(task=> Number(task.id) !== Number(taskToDelete.id)))
+
       closeStatusDeleteModal()
     }
   }
 
-  const handleAddOrEditTask=(taskData:Task):void=>{
+  const handleAddOrEditTask=(taskData : TTask) : void=>{
     if(taskData.id){
       setTasks(prev=>prev.map(task=>
         task.id===taskData.id ? {...task, ...taskData} : task
@@ -81,7 +77,7 @@ export const TodoList = () => {
       <div className="page-wrapper">
         <div className="top-title">
           <h2>Список задач</h2>
-          <Button title="Добавить задачу" icon={<Add />} onClick={() => {openAddModal()}} />
+          <Button title="Добавить задачу" icon={<Add />} onClick={openAddModal} />
         </div>
         <div className="task-container">
           {tasks.map((task) => (
@@ -98,7 +94,7 @@ export const TodoList = () => {
       <DeleteModal 
       onDelete={handleDeleteTask} 
       onClose={closeStatusDeleteModal}
-      taskTitle={taskToDelete?.title}/>}
+      />}
     </>
   );
 };
