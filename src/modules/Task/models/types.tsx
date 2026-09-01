@@ -14,8 +14,4 @@ export type TAddEditTaskModalProps = {
     onSubmit: (taskData: Omit<TTask, "id" | "progress"> & { id?: number }) => void; // разделить на тип для функции создания таски и редактирования
 };
 
-export type TDeleteModalProps = {
-    onClose: () => void;
-    taskTitle?: string;
-    onDelete: () => void
-}
+

@@ -3,27 +3,24 @@ import DeleteIcon from '../../../../shared/assets/icons/delete.svg?react';
 import EditIcon from '../../../../shared/assets/icons/edit.svg?react';
 import { CircularProgressBar } from '../../../../shared/UI/CircularProgressBar/CircularProgressBar.tsx';
 import './style.scss';
-import { EPriority, EStatus } from "../../models/enum.ts";
+import { statusMap } from '../../models/constants.ts';
+import { priorityMap } from '../../models/constants.ts';
+import { TTask } from '../../models/types.tsx';
 
-const statusMap: Record<EStatus, string> = { // можно вынести в отдельный файл constants.ts
-    todo: "Новая",
-    progress: "В процессе",
-    done: "Сделано"
-}
-
-const priorityMap: Record<EPriority, string> = { // можно вынести в отдельный файл constants.ts
-    low: "Низкий",
-    medium: "Средний",
-    high: "Высокий"
-}
 
 // Типизировать пропсы
 
+interface ITaskCardProps{
+    task: TTask;
+    onDelete: ()=>void;
+    onEdit: ()=>void
+}
+
 export const TaskCard = ({
-                             task: { title, priority, status, progress },
-                             onDelete,
-                             onEdit
-                         }) => {
+    task: { title, priority, status, progress },
+    onDelete,
+    onEdit
+    }: ITaskCardProps) => {
     return (
         <div className="task-card">
             <div className="flex w-100">

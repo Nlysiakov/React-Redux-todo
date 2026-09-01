@@ -7,11 +7,18 @@ import './style.scss';
 import { FC, FormEvent, useState } from 'react';
 import { TAddEditTaskModalProps } from '../../models/types.tsx';
 
+
+const priorityMap = {
+    high: "Высокий",
+    medium: "Средний",
+    low: "Низкий"
+}
+
 export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
-                                                                 onClose,
-                                                                 initialData,
-                                                                 onSubmit
-                                                             }) => {
+        onClose,
+        initialData,
+        onSubmit
+        }) => {
 
     const isEditing = !!initialData
 
@@ -21,21 +28,24 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const taskData = {
+        let taskData: any = {
             title,
             priority,
             status,
-            ...(isEditing && { id: initialData.id }) // требуется проверить на наличие объекта
         }
-        onSubmit(taskData)
+            if(initialData){
+                taskData.id=initialData.id
+            }
+            onSubmit(taskData)
     }
+    // спорное решение
 
     return (
         <Modal onClose={onClose}>
             <form onSubmit={handleSubmit}>
                 <div className="add-edit-modal">
                     <div className="flx-between">
-                        <span className="modal-title">{isEditing ? "Редактировать задачу" : "Добавить задачу"}</span>
+                        <span className="modal-title">{initialData ? "Редактировать задачу" : "Добавить задачу"}</span>
                         <Close className="cp" onClick={onClose}/>
                     </div>
                     <Input
@@ -50,14 +60,16 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
                     <div className="modal-priority">
                         <span>Приоритет</span>
                         <ul className="priority-buttons">
-                            {['high', 'medium', 'low'].map((p) => ( // Создать отдельный объект-словарь под статусы и мапить его
+                            {Object.entries(priorityMap).map(([key, value]) => ( // Создать отдельный объект-словарь под статусы и мапить его
                                 <li
-                                    key={p}
+                                    key={key}
                                     className={classNames(
-                                        p === priority && `${p}-selected`, p)}
-                                    onClick={() => setPriority(p)}
+                                        key === priority && `${key}-selected`,
+                                        key
+                                    )}
+                                    onClick={()=>setPriority(key)}
                                 >
-                                    {p === "high" ? "Высокий" : p === "medium" ? "Средний" : "Низкий"}
+                                    {value}
                                 </li>
                             ))}
                         </ul>

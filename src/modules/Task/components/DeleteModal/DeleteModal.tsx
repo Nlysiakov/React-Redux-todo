@@ -2,8 +2,13 @@ import { Button } from '../../../../shared/UI/Button/Button.tsx';
 import { Modal } from '../../../../shared/UI/Modal/Modal.tsx';
 import './style.scss';
 import { FC } from 'react';
-import { TDeleteModalProps } from '../../models/types.tsx'; // Перенести эти пропсы сюда в компонент
 
+
+type TDeleteModalProps = {
+    onClose: () => void;
+    taskTitle?: string;
+    onDelete: () => void
+}
 
 export const DeleteModal: FC<TDeleteModalProps> = ({ onClose, onDelete }) => (
     <Modal>

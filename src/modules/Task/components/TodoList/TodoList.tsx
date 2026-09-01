@@ -54,19 +54,37 @@ export const TodoList = () => {
         }
     }
 
-    const handleAddOrEditTask = (taskData: TTask): void => {
-        if (taskData.id) {
-            setTasks(prev => prev.map(task =>
-                task.id === taskData.id ? { ...task, ...taskData } : task
-            ))
-        } else {
-            const newTask = {
+    // const handleAddOrEditTask = (taskData: TTask): void => {
+    //     if (taskData.id) {
+    //         setTasks(prev => prev.map(task =>
+    //             task.id === taskData.id ? { ...task, ...taskData } : task
+    //         ))
+    //     } else {
+    //         const newTask = {
+    //             ...taskData,
+    //             id: Date.now(),
+    //             progress: 0
+    //         }
+    //         setTasks(prev => [newTask, ...prev])
+    //     }
+    //     closeAddEditModal()
+    // }
+
+    const handleAddTask=(taskData: Omit<TTask, "id" | "progress">)=>{
+        const newTask = {
                 ...taskData,
                 id: Date.now(),
                 progress: 0
             }
-            setTasks(prev => [newTask, ...prev])
-        }
+        setTasks(prev=>[newTask, ...prev])
+        closeAddEditModal()
+    }
+
+    const handleEditTask = (taskData: TTask)=>{
+        setTasks(prev=>prev.map(task=>
+            task.id===taskData.id
+             ? {...task, ...taskData} : task
+        ))
         closeAddEditModal()
     }
 
@@ -89,7 +107,7 @@ export const TodoList = () => {
                 </div>
             </div>
             {isOpenAddEditModal &&
-                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={handleAddOrEditTask} initialData={taskToEdit}/>}
+                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={taskToEdit ? handleEditTask : handleAddTask} initialData={taskToEdit}/>}
             {isOpenDeleteModal &&
                 <DeleteModal
                     onDelete={handleDeleteTask}
