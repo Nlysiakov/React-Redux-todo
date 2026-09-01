@@ -8,35 +8,48 @@ import { FC, FormEvent, useState } from 'react';
 import { TAddEditTaskModalProps } from '../../models/types.tsx';
 
 
-const priorityMap = {
+const priorityMap = { // Забыл удалить отсюда?
     high: "Высокий",
     medium: "Средний",
     low: "Низкий"
 }
 
 export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
-        onClose,
-        initialData,
-        onSubmit
-        }) => {
+                                                                 onClose,
+                                                                 initialData,
+                                                                 onSubmit
+                                                             }) => {
 
-    const isEditing = !!initialData
+    const isEditing = !!initialData // isEditing
 
     const [title, setTitle] = useState(initialData?.title || "")
     const [priority, setPriority] = useState(initialData?.priority || "medium")
+    /*
+        Ты никак не изменяешь состояние, в таком случае следует его просто сразу задавать в объекте при создании/редактировании
+        и конечно же нам не нужно его впустую так создавать,
+        либо нужно создать ещё возможность менять его при редактировании,
+        в таком случае разделение функции редактирования и создания как раз нам и поможет(но это будет сейчас трата времени, можешь не создавать)
+     */
     const [status] = useState(initialData?.status || "todo")
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        let taskData: any = {
+        let taskData: any = { // Как any типизировать не стоит, так как для объекта таски у тебя уже существует тип и на let менять тут незачем
             title,
             priority,
             status,
         }
-            if(initialData){
-                taskData.id=initialData.id
-            }
-            onSubmit(taskData)
+        /*
+            Так лучше не делать, мы специально разделяем функционал создания и редактирования;
+            поэтому тут следует условие разделить на проверку таким образом, что если у тебя открыта форма редактирования и существует initialData,
+            то вызывать функцию редактирования таски, а иначе функция для создания таски и передавать соответствующие аргументы.
+            Тогда именно тут нам не потребуется создавать объект taskData, onSubmit у тебя не будет,
+            в соответствующие функции сразу будешь передавать, что требуется
+         */
+        if (initialData) {
+            taskData.id = initialData.id
+        }
+        onSubmit(taskData)
     }
     // спорное решение
 
@@ -67,7 +80,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
                                         key === priority && `${key}-selected`,
                                         key
                                     )}
-                                    onClick={()=>setPriority(key)}
+                                    onClick={() => setPriority(key)}
                                 >
                                     {value}
                                 </li>

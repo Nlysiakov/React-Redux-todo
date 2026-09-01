@@ -13,7 +13,7 @@ export const TodoList = () => {
 
     const [tasks, setTasks] = useState(taskList)
 
-    const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false)
+    const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false) // Лучше разделить 
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
 
     const [taskToDelete, setTaskToDelete] = useState<null | TTask>(null)
@@ -70,20 +70,20 @@ export const TodoList = () => {
     //     closeAddEditModal()
     // }
 
-    const handleAddTask=(taskData: Omit<TTask, "id" | "progress">)=>{
+    const handleAddTask = (taskData: Omit<TTask, "id" | "progress">) => {
         const newTask = {
-                ...taskData,
-                id: Date.now(),
-                progress: 0
-            }
-        setTasks(prev=>[newTask, ...prev])
+            ...taskData,
+            id: Date.now(),
+            progress: 0
+        }
+        setTasks(prev => [newTask, ...prev]) // Ошибка из-за того, что в newTask у тебя тип id: number из-за Date.now(), а в TTask id: string
         closeAddEditModal()
     }
 
-    const handleEditTask = (taskData: TTask)=>{
-        setTasks(prev=>prev.map(task=>
-            task.id===taskData.id
-             ? {...task, ...taskData} : task
+    const handleEditTask = (taskData: TTask) => {
+        setTasks(prev => prev.map(task =>
+            task.id === taskData.id
+                ? { ...task, ...taskData } : task
         ))
         closeAddEditModal()
     }
@@ -107,7 +107,8 @@ export const TodoList = () => {
                 </div>
             </div>
             {isOpenAddEditModal &&
-                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={taskToEdit ? handleEditTask : handleAddTask} initialData={taskToEdit}/>}
+                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={taskToEdit ? handleEditTask : handleAddTask}
+                                  initialData={taskToEdit}/>}
             {isOpenDeleteModal &&
                 <DeleteModal
                     onDelete={handleDeleteTask}
