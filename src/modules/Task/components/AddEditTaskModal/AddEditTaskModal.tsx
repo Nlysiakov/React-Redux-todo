@@ -5,53 +5,56 @@ import { Input } from '../../../../shared/UI/Input/Input.tsx';
 import { Modal } from '../../../../shared/UI/Modal/Modal.tsx';
 import './style.scss';
 import { FC, FormEvent, useState } from 'react';
-import { TAddEditTaskModalProps } from '../../models/types.tsx';
+import { TTask } from '../../models/types.tsx';
+import { EPriority, EStatus } from '../../models/enum.ts';
+
+type TTaskFormData = Omit<TTask, "id" | "progress">
+
+type TAddEditTaskModalProps = {
+    onClose: () => void;
+    initialData?: TTask | null;
+    onSubmit: {
+        (taskData: TTaskFormData | TTask): void;
+    } // разделить на тип для функции создания таски и редактирования
+};
 
 
-const priorityMap = { // Забыл удалить отсюда?
-    high: "Высокий",
-    medium: "Средний",
-    low: "Низкий"
+const priorityMap:Record<EPriority, string>={
+    [EPriority.HIGH]: "Высокий",
+    [EPriority.MEDIUM]: "Средний",
+    [EPriority.LOW]: "Низкий"
 }
 
 export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
-                                                                 onClose,
-                                                                 initialData,
-                                                                 onSubmit
-                                                             }) => {
+    onClose,
+    initialData,
+    onSubmit
+    }) => {
 
     const isEditing = !!initialData // isEditing
 
     const [title, setTitle] = useState(initialData?.title || "")
-    const [priority, setPriority] = useState(initialData?.priority || "medium")
-    /*
-        Ты никак не изменяешь состояние, в таком случае следует его просто сразу задавать в объекте при создании/редактировании
-        и конечно же нам не нужно его впустую так создавать,
-        либо нужно создать ещё возможность менять его при редактировании,
-        в таком случае разделение функции редактирования и создания как раз нам и поможет(но это будет сейчас трата времени, можешь не создавать)
-     */
-    const [status] = useState(initialData?.status || "todo")
+    const [priority, setPriority] = useState(initialData?.priority || EPriority.MEDIUM)
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
-        let taskData: any = { // Как any типизировать не стоит, так как для объекта таски у тебя уже существует тип и на let менять тут незачем
+        const taskData: TTaskFormData = {
             title,
             priority,
-            status,
+            status: EStatus.TODO,
         }
-        /*
-            Так лучше не делать, мы специально разделяем функционал создания и редактирования;
-            поэтому тут следует условие разделить на проверку таким образом, что если у тебя открыта форма редактирования и существует initialData,
-            то вызывать функцию редактирования таски, а иначе функция для создания таски и передавать соответствующие аргументы.
-            Тогда именно тут нам не потребуется создавать объект taskData, onSubmit у тебя не будет,
-            в соответствующие функции сразу будешь передавать, что требуется
-         */
-        if (initialData) {
-            taskData.id = initialData.id
+       
+        if (isEditing && initialData) {
+            const editData: TTask={
+                ...taskData,
+                id: initialData.id,
+                progress: initialData.progress
+            }
+            onSubmit(editData)
+        }else{
+            onSubmit(taskData)
         }
-        onSubmit(taskData)
     }
-    // спорное решение
 
     return (
         <Modal onClose={onClose}>
@@ -73,16 +76,16 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
                     <div className="modal-priority">
                         <span>Приоритет</span>
                         <ul className="priority-buttons">
-                            {Object.entries(priorityMap).map(([key, value]) => ( // Создать отдельный объект-словарь под статусы и мапить его
+                            {Object.values(EPriority).map((p) => (
                                 <li
-                                    key={key}
+                                    key={p}
                                     className={classNames(
-                                        key === priority && `${key}-selected`,
-                                        key
+                                        p === priority && `${p}-selected`,
+                                        p
                                     )}
-                                    onClick={() => setPriority(key)}
+                                    onClick={() => setPriority(p)}
                                 >
-                                    {value}
+                                    {priorityMap[p]}
                                 </li>
                             ))}
                         </ul>

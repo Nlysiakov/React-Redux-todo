@@ -11,9 +11,15 @@ export interface IModalProps {
     Исправить обработку закрытия по оверлею на способ сравнивания e.target и e.currentTarget
  */
 export const Modal: FC<IModalProps> = ({ children, onClose }: IModalProps) => {
+
+    const handleOverleyClick=(e: React.MouseEvent<HTMLDivElement>)=>{
+        if(e.target===e.currentTarget && onClose){
+            onClose()
+        }
+    }
     return (
-        <div className="modal" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal" onClick={handleOverleyClick}>
+            <div className="modal-content">
                 {children}
             </div>
         </div>

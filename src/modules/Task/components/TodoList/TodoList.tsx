@@ -13,7 +13,8 @@ export const TodoList = () => {
 
     const [tasks, setTasks] = useState(taskList)
 
-    const [isOpenAddEditModal, setIsOpenAddEditModal] = useState(false) // Лучше разделить 
+    const [isOpenAddModal, setIsOpenAddModal] = useState(false)
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false)
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
 
     const [taskToDelete, setTaskToDelete] = useState<null | TTask>(null)
@@ -21,16 +22,17 @@ export const TodoList = () => {
 
     const openAddModal = () => {
         setTaskToEdit(null)
-        setIsOpenAddEditModal(true)
+        setIsOpenAddModal(true)
     }
 
     const openEditModal = (task: TTask): void => {
         setTaskToEdit(task)
-        setIsOpenAddEditModal(true)
+        setIsOpenEditModal(true)
     }
 
     const closeAddEditModal = () => {
-        setIsOpenAddEditModal(false)
+        setIsOpenAddModal(false)
+        setIsOpenEditModal(false)
         setTaskToEdit(null)
     }
 
@@ -54,21 +56,6 @@ export const TodoList = () => {
         }
     }
 
-    // const handleAddOrEditTask = (taskData: TTask): void => {
-    //     if (taskData.id) {
-    //         setTasks(prev => prev.map(task =>
-    //             task.id === taskData.id ? { ...task, ...taskData } : task
-    //         ))
-    //     } else {
-    //         const newTask = {
-    //             ...taskData,
-    //             id: Date.now(),
-    //             progress: 0
-    //         }
-    //         setTasks(prev => [newTask, ...prev])
-    //     }
-    //     closeAddEditModal()
-    // }
 
     const handleAddTask = (taskData: Omit<TTask, "id" | "progress">) => {
         const newTask = {
@@ -76,7 +63,7 @@ export const TodoList = () => {
             id: Date.now(),
             progress: 0
         }
-        setTasks(prev => [newTask, ...prev]) // Ошибка из-за того, что в newTask у тебя тип id: number из-за Date.now(), а в TTask id: string
+        setTasks(prev => [newTask, ...prev])
         closeAddEditModal()
     }
 
@@ -106,9 +93,10 @@ export const TodoList = () => {
                     ))}
                 </div>
             </div>
-            {isOpenAddEditModal &&
-                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={taskToEdit ? handleEditTask : handleAddTask}
-                                  initialData={taskToEdit}/>}
+            {isOpenAddModal &&
+                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={handleAddTask}/>}
+            {isOpenEditModal && 
+                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={handleEditTask} initialData={taskToEdit}/>}                     
             {isOpenDeleteModal &&
                 <DeleteModal
                     onDelete={handleDeleteTask}

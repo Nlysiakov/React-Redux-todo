@@ -1,7 +1,7 @@
 import { EPriority, EStatus } from "./enum.ts";
 
 export type TTask = {
-    id: string;
+    id: number;
     title: string;
     priority: EPriority;
     status: EStatus;
