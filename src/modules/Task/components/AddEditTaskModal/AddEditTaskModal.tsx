@@ -13,9 +13,7 @@ type TTaskFormData = Omit<TTask, "id" | "progress">
 type TAddEditTaskModalProps = {
     onClose: () => void;
     initialData?: TTask | null;
-    onSubmit: {
-        (taskData: TTaskFormData | TTask): void;
-    } // разделить на тип для функции создания таски и редактирования
+    onSubmit: (taskData: TTaskFormData | TTask)=> void;
 };
 
 
@@ -31,30 +29,62 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     onSubmit
     }) => {
 
-    const isEditing = !!initialData // isEditing
+    const isEditing = !!initialData
 
     const [title, setTitle] = useState(initialData?.title || "")
     const [priority, setPriority] = useState(initialData?.priority || EPriority.MEDIUM)
 
-    const handleSubmit = (e: FormEvent) => {
+    // const handleSubmit = (e: FormEvent) => {
+    //     e.preventDefault()
+    //     const taskData: TTaskFormData = {
+    //         title,
+    //         priority,
+    //         status: EStatus.TODO,
+    //     }
+       
+    //     if (isEditing && initialData) {
+    //         const editData: TTask={
+    //             ...taskData,
+    //             id: initialData.id,
+    //             progress: initialData.progress
+    //         }
+    //         onSubmit(editData)
+    //     }else{
+    //         onSubmit(taskData)
+    //     }
+    // }
+
+    const handleAddSubmit=(e: FormEvent)=>{
         e.preventDefault()
-        const taskData: TTaskFormData = {
+        const taskData: TTaskFormData={
+            title,
+            priority,
+            status: EStatus.TODO
+        }
+        onSubmit(taskData)
+        onClose()
+    }
+
+    const handleEditSubmit=(e:FormEvent)=>{
+        e.preventDefault()
+        if(!initialData) return
+
+        const editData: TTask={
             title,
             priority,
             status: EStatus.TODO,
+            id: initialData.id,
+            progress: initialData.progress
         }
-       
-        if (isEditing && initialData) {
-            const editData: TTask={
-                ...taskData,
-                id: initialData.id,
-                progress: initialData.progress
-            }
-            onSubmit(editData)
-        }else{
-            onSubmit(taskData)
-        }
+        onSubmit(editData)
+        onClose()
     }
+
+    const handleSubmit=isEditing ? handleEditSubmit : handleAddSubmit
+
+
+
+
 
     return (
         <Modal onClose={onClose}>

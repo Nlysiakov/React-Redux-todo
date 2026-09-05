@@ -8,8 +8,6 @@ import { priorityMap } from '../../models/constants.ts';
 import { TTask } from '../../models/types.tsx';
 
 
-// Типизировать пропсы
-
 interface ITaskCardProps{
     task: TTask;
     onDelete: ()=>void;
