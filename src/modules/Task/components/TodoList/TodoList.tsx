@@ -93,10 +93,8 @@ export const TodoList = () => {
                     ))}
                 </div>
             </div>
-            {isOpenAddModal &&
-                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={handleAddTask}/>}
-            {isOpenEditModal && 
-                <AddEditTaskModal onClose={closeAddEditModal} onSubmit={handleEditTask} initialData={taskToEdit}/>}                     
+            {isOpenAddModal || isOpenEditModal &&
+                <AddEditTaskModal onClose={closeAddEditModal} addTodo={handleAddTask} editTodo={handleEditTask} initialData={taskToEdit}/>}                   
             {isOpenDeleteModal &&
                 <DeleteModal
                     onDelete={handleDeleteTask}

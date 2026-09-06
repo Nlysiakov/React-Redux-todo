@@ -8,10 +8,4 @@ export type TTask = {
     progress: number;
 }
 
-export type TAddEditTaskModalProps = {
-    onClose: () => void;
-    initialData?: TTask | null;
-    onSubmit: (taskData: Omit<TTask, "id" | "progress"> & { id?: number }) => void; // разделить на тип для функции создания таски и редактирования
-};
-
 

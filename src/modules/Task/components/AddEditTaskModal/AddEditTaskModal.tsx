@@ -13,7 +13,8 @@ type TTaskFormData = Omit<TTask, "id" | "progress">
 type TAddEditTaskModalProps = {
     onClose: () => void;
     initialData?: TTask | null;
-    onSubmit: (taskData: TTaskFormData | TTask)=> void;
+    addTodo: (taskData: TTaskFormData)=> void;
+    editTodo: (taskData: TTask)=>void
 };
 
 
@@ -26,7 +27,8 @@ const priorityMap:Record<EPriority, string>={
 export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     onClose,
     initialData,
-    onSubmit
+    addTodo,
+    editTodo
     }) => {
 
     const isEditing = !!initialData
@@ -34,25 +36,6 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     const [title, setTitle] = useState(initialData?.title || "")
     const [priority, setPriority] = useState(initialData?.priority || EPriority.MEDIUM)
 
-    // const handleSubmit = (e: FormEvent) => {
-    //     e.preventDefault()
-    //     const taskData: TTaskFormData = {
-    //         title,
-    //         priority,
-    //         status: EStatus.TODO,
-    //     }
-       
-    //     if (isEditing && initialData) {
-    //         const editData: TTask={
-    //             ...taskData,
-    //             id: initialData.id,
-    //             progress: initialData.progress
-    //         }
-    //         onSubmit(editData)
-    //     }else{
-    //         onSubmit(taskData)
-    //     }
-    // }
 
     const handleAddSubmit=(e: FormEvent)=>{
         e.preventDefault()
@@ -61,7 +44,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
             priority,
             status: EStatus.TODO
         }
-        onSubmit(taskData)
+        addTodo(taskData)
         onClose()
     }
 
@@ -76,7 +59,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
             id: initialData.id,
             progress: initialData.progress
         }
-        onSubmit(editData)
+        editTodo(editData)
         onClose()
     }
 
