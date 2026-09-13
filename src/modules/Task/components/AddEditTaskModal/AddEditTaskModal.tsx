@@ -16,6 +16,7 @@ type TAddEditTaskModalProps = {
     initialData?: TTask | null;
     addTodo: (taskData: TTaskFormData)=> void;
     editTodo: (taskData: TTask)=>void
+    isEditing: boolean
 };
 
 
@@ -23,10 +24,10 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     onClose,
     initialData,
     addTodo,
-    editTodo
+    editTodo,
+    isEditing
     }) => {
 
-    const isEditing = !!initialData
 
     const [title, setTitle] = useState(initialData?.title || "")
     const [priority, setPriority] = useState(initialData?.priority || EPriority.MEDIUM)
@@ -69,7 +70,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
             <form onSubmit={handleSubmit}>
                 <div className="add-edit-modal">
                     <div className="flx-between">
-                        <span className="modal-title">{initialData ? "Редактировать задачу" : "Добавить задачу"}</span>
+                        <span className="modal-title">{isEditing ? "Редактировать задачу" : "Добавить задачу"}</span>
                         <Close className="cp" onClick={onClose}/>
                     </div>
                     <Input

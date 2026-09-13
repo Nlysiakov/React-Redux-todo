@@ -14,8 +14,9 @@ export const Modal: FC<IModalProps> = ({ children, onClose }: IModalProps) => {
     //         onClose()
     //     }
     // }
+    
     return (
-        <div className="modal" onClick={e.target===else.currentTarget && onClose}>
+        <div className="modal" onClick={(e)=>e.target===e.currentTarget && onClose}>
             <div className="modal-content">
                 {children}
             </div>
