@@ -9,13 +9,13 @@ export interface IModalProps {
 
 export const Modal: FC<IModalProps> = ({ children, onClose }: IModalProps) => {
 
-    const handleOverleyClick=(e: React.MouseEvent<HTMLDivElement>)=>{
-        if(e.target===e.currentTarget && onClose){
-            onClose()
-        }
-    }
+    // const handleOverleyClick=(e: React.MouseEvent<HTMLDivElement>)=>{
+    //     if(e.target===e.currentTarget){
+    //         onClose()
+    //     }
+    // }
     return (
-        <div className="modal" onClick={handleOverleyClick}>
+        <div className="modal" onClick={e.target===else.currentTarget && onClose}>
             <div className="modal-content">
                 {children}
             </div>

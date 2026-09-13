@@ -7,6 +7,7 @@ import './style.scss';
 import { FC, FormEvent, useState } from 'react';
 import { TTask } from '../../models/types.tsx';
 import { EPriority, EStatus } from '../../models/enum.ts';
+import { priorityMap } from '../../models/constants.ts';
 
 type TTaskFormData = Omit<TTask, "id" | "progress">
 
@@ -17,12 +18,6 @@ type TAddEditTaskModalProps = {
     editTodo: (taskData: TTask)=>void
 };
 
-
-const priorityMap:Record<EPriority, string>={
-    [EPriority.HIGH]: "Высокий",
-    [EPriority.MEDIUM]: "Средний",
-    [EPriority.LOW]: "Низкий"
-}
 
 export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     onClose,

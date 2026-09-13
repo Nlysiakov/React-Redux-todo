@@ -3,14 +3,15 @@ import { EPriority } from "./enum"
 import { EStatus } from "./enum"
 
 
-export const statusMap: Record<EStatus, string> = {
-    todo: "Новая",
-    progress: "В процессе",
-    done: "Сделано"
+
+export const priorityMap:Record<EPriority, string>={
+    [EPriority.HIGH]: "Высокий",
+    [EPriority.MEDIUM]: "Средний",
+    [EPriority.LOW]: "Низкий"
 }
 
-export const priorityMap: Record<EPriority, string> = {
-    low: "Низкий",
-    medium: "Средний",
-    high: "Высокий"
+export const statusMap: Record<EStatus, string>={
+    [EStatus.DONE]: "Сделано",
+    [EStatus.PROGRESS]: "В процессе",
+    [EStatus.TODO]: "Новая"
 }
