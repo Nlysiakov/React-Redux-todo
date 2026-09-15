@@ -16,7 +16,7 @@ type TAddEditTaskModalProps = {
     initialData?: TTask | null;
     addTodo: (taskData: TTaskFormData)=> void;
     editTodo: (taskData: TTask)=>void
-    isEditing: boolean
+    isEditing?: boolean
 };
 
 
