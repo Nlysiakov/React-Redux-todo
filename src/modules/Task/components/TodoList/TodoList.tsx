@@ -99,7 +99,6 @@ export const TodoList = () => {
                 addTodo={handleAddTask} 
                 editTodo={handleEditTask} 
                 initialData={taskToEdit}
-                isEditing={isOpenEditModal}
                 />
                 )}                   
             {isOpenDeleteModal &&

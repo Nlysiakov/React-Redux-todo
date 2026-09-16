@@ -16,7 +16,6 @@ type TAddEditTaskModalProps = {
     initialData?: TTask | null;
     addTodo: (taskData: TTaskFormData)=> void;
     editTodo: (taskData: TTask)=>void
-    isEditing?: boolean
 };
 
 
@@ -25,41 +24,34 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     initialData,
     addTodo,
     editTodo,
-    isEditing
     }) => {
+
 
 
     const [title, setTitle] = useState(initialData?.title || "")
     const [priority, setPriority] = useState(initialData?.priority || EPriority.MEDIUM)
 
 
-    const handleAddSubmit=(e: FormEvent)=>{
+    const handleSubmit=(e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
-        const taskData: TTaskFormData={
+        
+        const data={
             title,
             priority,
             status: EStatus.TODO
         }
-        addTodo(taskData)
-        onClose()
-    }
 
-    const handleEditSubmit=(e:FormEvent)=>{
-        e.preventDefault()
-        if(!initialData) return
-
-        const editData: TTask={
-            title,
-            priority,
-            status: EStatus.TODO,
-            id: initialData.id,
-            progress: initialData.progress
+        if(initialData){
+            editTodo({
+                    ...data,
+                    id: initialData.id,
+                    progress:initialData.progress
+                })
+        }else{
+            addTodo(data)
         }
-        editTodo(editData)
         onClose()
     }
-
-    const handleSubmit=isEditing ? handleEditSubmit : handleAddSubmit
 
 
 
@@ -70,7 +62,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
             <form onSubmit={handleSubmit}>
                 <div className="add-edit-modal">
                     <div className="flx-between">
-                        <span className="modal-title">{isEditing ? "Редактировать задачу" : "Добавить задачу"}</span>
+                        <span className="modal-title">{initialData ? "Редактировать задачу" : "Добавить задачу"}</span>
                         <Close className="cp" onClick={onClose}/>
                     </div>
                     <Input
@@ -100,7 +92,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
                         </ul>
                     </div>
                     <div className="flx-right mt-50">
-                        <Button title={isEditing ? "Редактировать" : "Добавить"} onClick={handleSubmit}/>
+                        <Button title={initialData ? "Редактировать" : "Добавить"} onClick={handleSubmit}/>
                     </div>
                 </div>
             </form>
