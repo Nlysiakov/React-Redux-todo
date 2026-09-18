@@ -26,6 +26,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
     editTodo,
     }) => {
 
+        const isEditing=initialData
 
 
     const [title, setTitle] = useState(initialData?.title || "")
@@ -62,7 +63,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
             <form onSubmit={handleSubmit}>
                 <div className="add-edit-modal">
                     <div className="flx-between">
-                        <span className="modal-title">{initialData ? "Редактировать задачу" : "Добавить задачу"}</span>
+                        <span className="modal-title">{isEditing ? "Редактировать задачу" : "Добавить задачу"}</span>
                         <Close className="cp" onClick={onClose}/>
                     </div>
                     <Input
@@ -92,7 +93,7 @@ export const AddEditTaskModal: FC<TAddEditTaskModalProps> = ({
                         </ul>
                     </div>
                     <div className="flx-right mt-50">
-                        <Button title={initialData ? "Редактировать" : "Добавить"} onClick={handleSubmit}/>
+                        <Button title={isEditing ? "Редактировать" : "Добавить"} onClick={handleSubmit}/>
                     </div>
                 </div>
             </form>
